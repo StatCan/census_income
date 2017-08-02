@@ -1,7 +1,22 @@
 {
 	"fr": {
 		"census_income": {
-
+			"time": "Temps",
+			"sex": "Sexe",
+			"age_group": "Groupes d'âge",
+			"age": "Âge",
+			"geo": "Geographie",
+			"time_title": "",
+			"sex_title": "",
+			"agegroup_title": "",
+			"age_title": "",
+			"geo_title": "",
+			"sex_x_total": "Total - Les deux sexes",
+			"sex_x_m": "Sexe masculin",
+			"sex_x_f": "Sexe féminin",
+			"agegroup_x_groups": " {{start}} à {{end}} ans",
+			"age_x_total": "Total - 15 ans et plus",
+			"age_x_year": "{{year}} ans"
 		}
 	}
 }

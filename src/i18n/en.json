@@ -1,7 +1,22 @@
 {
 	"en": {
 		"census_income": {
-
+			"time": "Time",
+			"sex": "Sex",
+			"agegroup": "Age Groups",
+			"age": "Age",
+			"geo": "Geography",
+			"time_title": "Income percentiles (1985 to 2015)",
+			"sex_title": "Income percentiles (total, male, female)",
+			"agegroup_title": "Income percentiles (5 year age groups)",
+			"age_title": "Income percentiles (single years of age)",
+			"geo_title": "Income percentiles (Canada, Provinces / Territories, CMA /CA)",
+			"sex_x_total": "Total - Both sexes",
+			"sex_x_m": "Male",
+			"sex_x_f": "Female",
+			"agegroup_x_groups": " {{start}}-{{end}} years",
+			"age_x_total": "Total - 15 years of age and older",
+			"age_x_year": "{{year}} years"
 		}
 	}
 }
