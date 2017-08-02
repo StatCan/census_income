@@ -1,0 +1,33 @@
+{
+    "env": {
+        "browser": true,
+        "jquery": true
+    },
+    "globals": {
+      "d3": true,
+      "i18n": true,
+      "i18next": true,
+      "sgc": true,
+      "bubbleChart": true,
+      "wb": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "error",
+            2, {"outerIIFEBody": 0}
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
