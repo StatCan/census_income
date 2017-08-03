@@ -6,20 +6,47 @@ var output = {};
 
 fs.readFile("data/incomedata.csv", "utf8", function(err, data) {
   var csv = d3.csvParse(data),
-    row, group, groupName, subgroup;
+    row, group, groupName, oldGroupName, subgroup, subGroupName;
 
   for (var r = 0; r < csv.length; r++) {
     row = csv[r];
 
-    if (row.ENG_LABEL_VIEW !== groupName) {
-      output[row.ENG_LABEL_VIEW] = group = {};
-      groupName = row.ENG_LABEL_VIEW;
+    switch(row.ENG_LABEL_VIEW) {
+    case "Age Groups":
+      groupName = "agegroup";
+      break;
+    case "Can, Prov / Terr, CMA /CA":
+      groupName = "geo";
+      break;
+    default:
+      groupName = row.ENG_LABEL_VIEW.toLowerCase();
     }
 
-    subgroup = group[row.Code] = [];
+    if (groupName !== oldGroupName) {
+      output[groupName] = group = {};
+      oldGroupName = groupName;
+    }
+
+    if (groupName === "sex") {
+      switch(row.Code){
+      case "0":
+        subGroupName = "total";
+        break;
+      case "1":
+        subGroupName = "m";
+        break;
+      case "2":
+        subGroupName = "f";
+        break;
+      }
+    } else {
+      subGroupName = row.Code;
+    }
+
+    subgroup = group[subGroupName] = [];
 
     for (var p = 1; p < 100; p++) {
-      subgroup.push(row[`totpnz${p}`]);
+      subgroup.push(parseInt(row[`totpnz${p}`], 10));
     }
   }
 
