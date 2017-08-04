@@ -8,20 +8,26 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   settings = {
     x: {
       getValue: function(d){
-        return null;
+        return new Date(d.id + "-10");
       }
     },
     y: {
       getValue: function(d) {
-        return null;
+        return d.value;
       }
     },
     z: {
       getId: function(d) {
-        return null;
+        return d.percentile;
+      },
+      getDataPoints: function(d) {
+        return d.values;
+      },
+      getText: function(d) {
+        return d.percentile + "%";
       },
       getClass: function(d) {
-        return null;
+        return "p" + d.percentile;
       }
     }
   },
@@ -42,8 +48,40 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     }
     return text;
   },
-  showData = function() {
+  processData = function(data) {
+    var groups = Object.keys(data),
+      output = {},
+      g, groupName, group, p, percentile, xKeys;
 
+    for (g = 0; g < groups.length; g++) {
+      groupName = groups[g];
+
+      group = output[groupName] = [];
+
+      xKeys = Object.keys(data[groupName]);
+      for (p = 4; p < data[groupName][xKeys[0]].length; p++) {
+        percentile = p + 1;
+        if (percentile % 5 === 0 || percentile === 99) {
+          group.push({
+            percentile: percentile,
+            values: xKeys.map(function(x) {
+              return {
+                id: x,
+                value: data[groupName][x][p]
+              };
+            })
+          });
+        }
+      }
+    }
+
+    return output;
+  },
+  showData = function() {
+    var group = "time";
+
+    settings.data = incomeData[group];
+    lineChart(chart, settings);
   },
   uiHandler = function(event) {
 
@@ -57,6 +95,8 @@ i18n.load([sgcI18nRoot, rootI18nRoot], function() {
     .defer(d3.json, incomeDataUrl)
     .await(function(error, sgcs, income) {
       sgcData = sgcs;
-      incomeData = income;
+      incomeData = processData(income);
+
+      showData();
     });
 });
