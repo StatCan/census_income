@@ -29,7 +29,14 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       getClass: function(d) {
         return "p" + d.percentile;
       }
-    }
+    },
+    showLabels: function() {
+      if ([99, 95, 75, 50, 25, 10].indexOf(this.z.getId.apply(this, arguments)) !== -1)
+        return true;
+      return false;
+    },
+    width: 1000,
+    datatable: false
   },
   getSGCText = function(sgcId) {
     var text = i18next.t("sgc_" + sgcId, {ns: "sgc"}),
