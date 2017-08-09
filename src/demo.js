@@ -6,6 +6,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   chart = container.append("svg")
     .attr("id", "canada_income"),
   settings = {
+    margin: {
+      right: 30
+    },
     x: {
       getValue: function(d){
         return new Date(d.id + "-10");
@@ -24,7 +27,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         return d.values;
       },
       getText: function(d) {
-        return d.percentile + "%";
+        return d.percentile + "th";
       },
       getClass: function(d) {
         return "p" + d.percentile;

@@ -3,6 +3,19 @@
 	stroke: #000;
 }
 
+.p99,
+.p75,
+.p50,
+.p25,
+.p10 {
+	stroke-width: 2;
+}
+
 .p50 {
 	stroke: #3975bf;
+}
+
+.label {
+	text-anchor: start;
+	transform: translate(5px, 5px);
 }
