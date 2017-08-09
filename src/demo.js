@@ -91,12 +91,41 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     var group = "time";
 
     settings.data = incomeData[group];
-    lineChart(chart, settings);
+    chartObj = lineChart(chart, settings);
+  },
+  showIncome = function(income) {
+    var incomeLine = chart.select("g").selectAll(".income-line")
+        .data([income]),
+      y = chartObj.y(income);
+
+    incomeLine
+      .enter()
+      .append("line")
+        .attr("class", "income-line")
+        .attr("x1", 0)
+        .attr("x2", chartObj.settings.innerWidth)
+        .attr("y1", y)
+        .attr("y2", y);
+
+    incomeLine
+      .transition()
+      .duration(1500)
+      .ease(d3.easeElasticOut)
+        .attr("y1", y)
+        .attr("y2", y);
   },
   uiHandler = function(event) {
+    var value;
+    switch (event.target.id) {
+    case "income":
+      value = parseInt(event.target.value, 10);
+      if (value) {
+        showIncome(value);
+      }
 
+    }
   },
-  sgcData, incomeData;
+  sgcData, incomeData, chartObj, uiTimeout;
 
 
 i18n.load([sgcI18nRoot, rootI18nRoot], function() {
@@ -108,5 +137,12 @@ i18n.load([sgcI18nRoot, rootI18nRoot], function() {
       incomeData = processData(income);
 
       showData();
+
+      $(".income").on("input change", function(event) {
+        clearTimeout(uiTimeout);
+        uiTimeout = setTimeout(function() {
+          uiHandler(event);
+        }, 100);
+      });
     });
 });

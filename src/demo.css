@@ -20,3 +20,8 @@
 	text-anchor: start;
 	transform: translate(5px, 5px);
 }
+
+.income-line {
+	stroke-width: 2;
+	stroke: #F00;
+}
