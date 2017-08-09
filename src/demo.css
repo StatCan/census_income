@@ -1,9 +1,10 @@
 .dline {
-	stroke-width: 1;
+	stroke-width: 0.5;
 	stroke: #000;
 }
 
 .p99,
+.p95,
 .p75,
 .p50,
 .p25,
