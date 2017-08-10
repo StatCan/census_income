@@ -53,13 +53,17 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     datatable: false
   },
   geti18n = function(value) {
-    var sep = "_x_";
+    var sep = "_x_",
+      subValue;
 
     switch(this.group){
     case "time":
       return value;
     case "sex":
       return i18next.t(this.group + sep + value, {ns: "census_income"});
+    case "age":
+      subValue = value === "0" ? "total" : "year";
+      return subValue === "year" && parseInt(value, 10) % 5 === 0 ? i18next.t(this.group + sep + subValue, {ns: "census_income", year: value}) : null;
     }
   },
   getOrdinalPoint = function() {
@@ -123,7 +127,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     return output;
   },
   showData = function() {
-    settings.group = "sex";
+    settings.group = "age";
     switch(settings.group) {
     case "time":
       break;
