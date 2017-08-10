@@ -21,9 +21,6 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       },
       getText: function() {
         return geti18n.call(this, this.x.getValue.apply(this, arguments));
-      },
-      getTickText: function(value) {
-        return geti18n.call(this, value);
       }
     },
     y: {
@@ -72,19 +69,24 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       return i18next.t(this.group + sep + value.replace(".", "-"), {ns: "census_income"});
     }
   },
-  getOrdinalPoint = function() {
-    return this.z.getDataPoints(this.data[0]);
-  },
-  getOrdinalDomain = function() {
-    return getOrdinalPoint.call(this).map(this.x.getValue);
-  },
-  getOrdinalRange = function() {
-    var sett = this,
-      point = getOrdinalPoint.call(sett),
-      factor = sett.innerWidth / (point.length - 1);
-    return point.map(function(d, i) {
-      return i * factor;
-    });
+  ordinalX = {
+    getPoint: function() {
+      return this.z.getDataPoints(this.data[0]);
+    },
+    getDomain: function() {
+      return ordinalX.getPoint.call(this).map(this.x.getValue);
+    },
+    getRange: function() {
+      var sett = this,
+        point = ordinalX.getPoint.call(sett),
+        factor = sett.innerWidth / (point.length - 1);
+      return point.map(function(d, i) {
+        return i * factor;
+      });
+    },
+    getTickText: function(value) {
+      return geti18n.call(this, value);
+    }
   },
   getSGCText = function(sgcId) {
     var text = i18next.t("sgc_" + sgcId, {ns: "sgc"}),
@@ -133,18 +135,25 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     return output;
   },
   showData = function(view) {
+    var newSettings = settings;
+
     settings.group = view || defaultView;
     switch(settings.group) {
     case "time":
       break;
     default:
-      settings.x.type = "ordinal";
-      settings.x.getDomain = getOrdinalDomain;
-      settings.x.getRange = getOrdinalRange;
+      newSettings = $.extend(true, {}, settings, {
+        x: {
+          type: "ordinal",
+          getDomain: ordinalX.getDomain,
+          getRange: ordinalX.getRange,
+          getTickText: ordinalX.getTickText
+        }
+      });
       break;
     }
-    settings.data = incomeData[settings.group];
-    chartObj = lineChart(chart, settings);
+    newSettings.data = incomeData[newSettings.group];
+    chartObj = lineChart(chart, newSettings);
   },
   showIncome = function(income) {
     var incomeLine = chart.select("g").selectAll(".income-line")
