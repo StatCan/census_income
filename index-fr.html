@@ -56,9 +56,18 @@
 			<h1 property="name" id="wb-cont">Revenu, Recensement de 2011</h1>
 			<p class="wb-inv">Toute modification apportera automatiquement une mise à jour au contenu de la page.</p>
 			<form onsubmit="return false;">
-				<div class="form-group">
+				<div class="form-group col-md-6">
 					<label for="income">Mon salaire</label>
 					<input type="number" id="income" class="form-control"/>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="view">Catégorie</label>
+					<select id="view" class="form-control">
+						<option value="agegroup">Groupes d'âge</option>
+						<option value="age">Âge</option>
+						<option value="sex">Sexe</option>
+						<option value="time" selected>Temps (1985 à 2015)</option>
+					</select>
 				</div>
 			</form>
 			<a href="#chrt-dt-tbl" class="wb-inv wb-show-onfocus">Passer le diagramme visuel interactif et passer directement à la table de données des langues</a>

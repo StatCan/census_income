@@ -5,6 +5,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   container = d3.select(".income .data"),
   chart = container.append("svg")
     .attr("id", "canada_income"),
+  defaultView = "time",
   settings = {
     margin: {
       right: 30
@@ -131,13 +132,13 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
 
     return output;
   },
-  showData = function() {
-    settings.group = "agegroup";
+  showData = function(view) {
+    settings.group = view || defaultView;
     switch(settings.group) {
     case "time":
       break;
     default:
-      settings.x.type = "ordinal"
+      settings.x.type = "ordinal";
       settings.x.getDomain = getOrdinalDomain;
       settings.x.getRange = getOrdinalRange;
       break;
@@ -174,7 +175,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       if (value) {
         showIncome(value);
       }
-
+      break;
+    case "view":
+      showData(event.target.value);
     }
   },
   sgcData, incomeData, chartObj, uiTimeout;

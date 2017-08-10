@@ -56,9 +56,18 @@
 			<h1 property="name" id="wb-cont">Income, 2011 Census</h1>
 			<p class="wb-inv">Changing any selection will automatically update the page content.</p>
 			<form onsubmit="return false;">
-				<div class="form-group">
+				<div class="form-group col-md-6">
 					<label for="income">My income</label>
 					<input type="number" id="income" class="form-control"/>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="view">Category</label>
+					<select id="view" class="form-control">
+						<option value="agegroup">Age groups</option>
+						<option value="age">Single years of age</option>
+						<option value="sex">Sex</option>
+						<option value="time" selected>Time (1985 to 2015)</option>
+					</select>
 				</div>
 			</form>
 			<a href="#chrt-dt-tbl" class="wb-inv wb-show-onfocus">Skip the interactive visual chart and move directly to the data table displaying the languages</a>
