@@ -11,7 +11,18 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     },
     x: {
       getValue: function(d){
-        return new Date(d.id + "-10");
+        switch (settings.group){
+        case "time":
+          return new Date(d.id + "-10");
+        default:
+          return d.id;
+        }
+      },
+      getText: function() {
+        return geti18n.call(this, this.x.getValue.apply(this, arguments));
+      },
+      getTickText: function(value) {
+        return geti18n.call(this, value);
       }
     },
     y: {
@@ -40,6 +51,30 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     },
     width: 1000,
     datatable: false
+  },
+  geti18n = function(value) {
+    var sep = "_x_";
+
+    switch(this.group){
+    case "time":
+      return value;
+    case "sex":
+      return i18next.t(this.group + sep + value, {ns: "census_income"});
+    }
+  },
+  getOrdinalPoint = function() {
+    return this.z.getDataPoints(this.data[0]);
+  },
+  getOrdinalDomain = function() {
+    return getOrdinalPoint.call(this).map(this.x.getValue);
+  },
+  getOrdinalRange = function() {
+    var sett = this,
+      point = getOrdinalPoint.call(sett),
+      factor = sett.innerWidth / (point.length - 1);
+    return point.map(function(d, i) {
+      return i * factor;
+    });
   },
   getSGCText = function(sgcId) {
     var text = i18next.t("sgc_" + sgcId, {ns: "sgc"}),
@@ -88,9 +123,17 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     return output;
   },
   showData = function() {
-    var group = "time";
-
-    settings.data = incomeData[group];
+    settings.group = "sex";
+    switch(settings.group) {
+    case "time":
+      break;
+    default:
+      settings.x.type = "ordinal"
+      settings.x.getDomain = getOrdinalDomain;
+      settings.x.getRange = getOrdinalRange;
+      break;
+    }
+    settings.data = incomeData[settings.group];
     chartObj = lineChart(chart, settings);
   },
   showIncome = function(income) {
