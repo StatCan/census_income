@@ -153,6 +153,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       break;
     }
     newSettings.data = incomeData[newSettings.group];
+    if (chartObj) {
+      chartObj.clear();
+    }
     chartObj = lineChart(chart, newSettings);
   },
   showIncome = function(income) {
