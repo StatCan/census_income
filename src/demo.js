@@ -84,7 +84,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       if (ticks !== true)
         return text;
 
-      return value === "0" ? text : null;
+      return value !== "0" ? text : null;
     }
   },
   ordinalX = {
