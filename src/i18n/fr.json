@@ -5,12 +5,12 @@
 			"sex": "Sexe",
 			"age_group": "Groupes d'âge",
 			"age": "Âge",
-			"geo": "Geographie",
-			"time_title": "",
-			"sex_title": "",
-			"agegroup_title": "",
-			"age_title": "",
-			"geo_title": "",
+			"geo": "Géographie",
+			"time_title": "FR_Income percentiles (1985 to 2015)",
+			"sex_title": "FR_Income percentiles (total, male, female)",
+			"agegroup_title": "FR_Income percentiles (5 year age groups)",
+			"age_title": "FR_Income percentiles (single years of age)",
+			"geo_title": "FR_Income percentiles (Canada, Provinces / Territories, CMA /CA)",
 			"sex_x_total": "Total - Les deux sexes",
 			"sex_x_m": "Sexe masculin",
 			"sex_x_f": "Sexe féminin",
@@ -27,7 +27,8 @@
 			"agegroup_x_67-5": "65 à 69 ans",
 			"agegroup_x_72-5": "70 ans et plus",
 			"age_x_total": "Total - 15 ans et plus",
-			"age_x_year": "{{year}} ans"
+			"age_x_year": "{{year}} ans",
+			"datatableTitle": "Données: {{title}}"
 		}
 	}
 }

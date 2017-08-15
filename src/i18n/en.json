@@ -27,7 +27,8 @@
 			"agegroup_x_67-5": "65-69 years",
 			"agegroup_x_72-5": "70 years plus",
 			"age_x_total": "Total - 15 years of age and older",
-			"age_x_year": "{{year}} years"
+			"age_x_year": "{{year}} years",
+			"datatableTitle": "Data: {{title}}"
 		}
 	}
 }

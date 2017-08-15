@@ -6,6 +6,12 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   chart = container.append("svg")
     .attr("id", "canada_income"),
   defaultView = "time",
+  rootI18nNs = "census_income",
+  dateFormatter = i18n.getDateFormatter({
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC"
+  }),
   settings = {
     margin: {
       right: 30
@@ -32,6 +38,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       getId: function(d) {
         return d.percentile;
       },
+      getKeys: function(d) {
+        return Object.keys(d);
+      },
       getDataPoints: function(d) {
         return d.values;
       },
@@ -48,25 +57,34 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       return false;
     },
     width: 1000,
-    datatable: false
+    datatable: {}
   },
-  geti18n = function(value) {
-    var sep = "_x_";
+  geti18n = function(value, ticks) {
+    var sep = "_x_",
+      text;
     switch(this.group){
     case "time":
-      return value;
+      return dateFormatter.format(value);
     case "sex":
-      return i18next.t(this.group + sep + value, {ns: "census_income"});
+      return i18next.t(this.group + sep + value, {ns: rootI18nNs});
     case "age":
-      if (value === "0") {
-        return; //i18next.t(this.group + sep + "total", {ns: "census_income"});
-      }
-      return parseInt(value, 10) % 5 === 0 ? i18next.t(this.group + sep + "year", {ns: "census_income", year: value}) : null;
+      text = value === "0" ?
+        i18next.t(this.group + sep + "total", {ns: rootI18nNs}) :
+        i18next.t(this.group + sep + "year", {ns: rootI18nNs, year: value});
+
+      if (ticks !== true)
+        return text;
+
+      return parseInt(text, 10) % 5 === 0 ? text : null;
     case "agegroup":
-      if (value === "0") {
-        return; //i18next.t("age" + sep + "total", {ns: "census_income"});
-      }
-      return i18next.t(this.group + sep + value.replace(".", "-"), {ns: "census_income"});
+      text = value === "0" ?
+        i18next.t("age" + sep + "total", {ns: rootI18nNs}) :
+        i18next.t(this.group + sep + value.replace(".", "-"), {ns: rootI18nNs});
+
+      if (ticks !== true)
+        return text;
+
+      return value === "0" ? text : null;
     }
   },
   ordinalX = {
@@ -85,11 +103,13 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       });
     },
     getTickText: function(value) {
-      return geti18n.call(this, value);
+      return geti18n.call(this, value, true);
     }
   },
   getSGCText = function(sgcId) {
-    var text = i18next.t("sgc_" + sgcId, {ns: "sgc"}),
+    var sgcNs = "sgc",
+      sgcPrefix = "sgc_",
+      text = i18next.t(sgcPrefix + sgcId, {ns: sgcNs}),
       sgcDef;
 
     if (sgcId.length > 2) {
@@ -101,7 +121,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         text += ", " + i18next.t(sgcDef[0].type, {ns: "sgc_type"});
       }
 
-      text += ", " + i18next.t("sgc_" + sgc.sgc.getProvince(sgcId), {ns: "sgc"});
+      text += ", " + i18next.t(sgcPrefix + sgc.sgc.getProvince(sgcId), {ns: sgcNs});
     }
     return text;
   },
@@ -153,6 +173,10 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       break;
     }
     newSettings.data = incomeData[newSettings.group];
+    newSettings.datatable.title = i18next.t("datatableTitle", {
+      ns: rootI18nNs,
+      title: i18next.t(settings.group + "_title", {ns: rootI18nNs})
+    });
     if (chartObj) {
       chartObj.clear();
     }
