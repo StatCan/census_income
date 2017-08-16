@@ -28,7 +28,7 @@
 			"agegroup_x_72-5": "70 ans et plus",
 			"age_x_total": "Total - 15 ans et plus",
 			"age_x_year": "{{year}} ans",
-			"datatableTitle": "Données: {{title}}"
+			"datatableTitle": "Données: {{- title}}"
 		}
 	}
 }

@@ -25,3 +25,8 @@
 	stroke-width: 2;
 	stroke: #F00;
 }
+
+.geo .x .tick text {
+	text-anchor: end;
+	transform: rotate(-45deg);
+}

@@ -14,7 +14,8 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   }),
   settings = {
     margin: {
-      right: 30
+      right: 30,
+      bottom: 120
     },
     x: {
       getValue: function(d){
@@ -85,6 +86,8 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         return text;
 
       return value !== "0" ? text : null;
+    case "geo":
+      return ticks ? i18next.t("sgc_" + value, {ns: "sgc"}) : getSGCText(value);
     }
   },
   ordinalX = {
@@ -136,6 +139,8 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       group = output[groupName] = [];
 
       xKeys = Object.keys(data[groupName]);
+      if (groupName === "geo")
+        xKeys.sort(sgc.sortCCW);
       for (p = 4; p < data[groupName][xKeys[0]].length; p++) {
         percentile = p + 1;
         if (percentile % 5 === 0 || percentile === 99) {
@@ -155,7 +160,8 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     return output;
   },
   showData = function(view) {
-    var newSettings = settings;
+    var groups = "age agegroup geo sex time",
+      newSettings = settings;
 
     settings.group = view || defaultView;
     switch(settings.group) {
@@ -172,11 +178,34 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       });
       break;
     }
-    newSettings.data = incomeData[newSettings.group];
+    if (settings.group === "geo") {
+      newSettings.data = incomeData[newSettings.group].map(function(p) {
+        var newObj = $.extend(true, {}, p),
+          vals = settings.z.getDataPoints(newObj),
+          v = 0,
+          sgcId;
+
+
+        while(v < vals.length) {
+          sgcId = settings.x.getValue(vals[v]);
+          if (sgcId === "01" || sgc.sgc.getProvince(sgcId) === sgcId) {
+            v++;
+            continue;
+          }
+          vals.splice(v, 1);
+        }
+
+        return newObj;
+      });
+    } else {
+      newSettings.data = incomeData[newSettings.group];
+    }
     newSettings.datatable.title = i18next.t("datatableTitle", {
       ns: rootI18nNs,
       title: i18next.t(settings.group + "_title", {ns: rootI18nNs})
     });
+    chart.classed(groups, false);
+    chart.classed(newSettings.group, true)
     if (chartObj) {
       chartObj.clear();
     }
