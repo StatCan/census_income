@@ -223,6 +223,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       newSettings = settings;
 
     settings.group = view || defaultView;
+    settings.data = incomeData[newSettings.group];
     switch(settings.group) {
     case "time":
       break;
@@ -238,7 +239,6 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       break;
     }
 
-    newSettings.data = incomeData[newSettings.group];
     newSettings.datatable.title = i18next.t("datatableTitle", {
       ns: rootI18nNs,
       title: i18next.t(settings.group + "_title", {ns: rootI18nNs})
@@ -249,6 +249,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       chartObj.clear();
     }
     chartObj = lineChart(chart, newSettings);
+    highlightIncome();
   },
   showIncome = function(income) {
     var incomeLine = chart.select("g").selectAll(".income-line")
@@ -271,20 +272,56 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         .attr("y1", y)
         .attr("y2", y);
   },
+  highlightIncome = function() {
+    var highlightClass = "highlight",
+      tableBody = container.select(".table tbody"),
+      getSelector = function(row, column) {
+        return "tr:nth-child(" + (row + 1) + ") td:nth-child(" + (column + 2) + ")";
+      },
+      highIncome, p, q, vals, val, h, selector;
+    tableBody.selectAll("." + highlightClass).classed(highlightClass, false);
+
+    if (myIncome) {
+      highIncome = [];
+      for (p = 0; p < settings.data.length; p++) {
+        vals = settings.z.getDataPoints(settings.data[p]);
+        for (q = 0; q < vals.length; q++) {
+          val = vals[q];
+          if (!highIncome[q]) {
+            if (settings.y.getValue(val) === myIncome) {
+              highIncome[q] = p;
+            } else if (settings.y.getValue(val) > myIncome){
+              highIncome[q] = [p, p-1];
+            }
+          }
+        }
+      }
+      for (h = 0; h < highIncome.length; h++) {
+        if (typeof highIncome[h] === "number") {
+          selector = getSelector(highIncome[h], h);
+        } else {
+          selector = getSelector(highIncome[h][0], h) + "," + getSelector(highIncome[h][1], h);
+        }
+        tableBody.selectAll(selector).classed(highlightClass, true);
+      }
+    }
+  },
   uiHandler = function(event) {
     var value;
     switch (event.target.id) {
     case "income":
       value = parseInt(event.target.value, 10);
       if (value) {
-        showIncome(value);
+        myIncome = value;
+        showIncome(myIncome);
+        highlightIncome();
       }
       break;
     case "view":
       showData(event.target.value);
     }
   },
-  sgcData, incomeData, chartObj, uiTimeout;
+  sgcData, incomeData, myIncome, chartObj, uiTimeout;
 
 
 i18n.load([sgcI18nRoot, rootI18nRoot], function() {
@@ -301,7 +338,7 @@ i18n.load([sgcI18nRoot, rootI18nRoot], function() {
         clearTimeout(uiTimeout);
         uiTimeout = setTimeout(function() {
           uiHandler(event);
-        }, 100);
+        }, 500);
       });
     });
 });

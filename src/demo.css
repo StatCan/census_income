@@ -30,3 +30,11 @@
 	text-anchor: end;
 	transform: rotate(-45deg);
 }
+
+td.highlight {
+	background: yellow;
+}
+
+td.highlight:before {
+	content: "* ";
+}
