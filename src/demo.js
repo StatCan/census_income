@@ -6,6 +6,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   chart = container.append("svg")
     .attr("id", "canada_income"),
   defaultView = "time",
+  geoGroup = "geo",
   rootI18nNs = "census_income",
   dateFormatter = i18n.getDateFormatter({
     month: "long",
@@ -87,6 +88,12 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
 
       return value !== "0" ? text : null;
     case "geo":
+    case "geo_atl":
+    case "geo_qc":
+    case "geo_on":
+    case "geo_pra":
+    case "geo_bc":
+    case "geo_terr":
       return ticks ? i18next.t("sgc_" + value, {ns: "sgc"}) : getSGCText(value);
     }
   },
@@ -131,29 +138,81 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   processData = function(data) {
     var groups = Object.keys(data),
       output = {},
-      g, groupName, group, p, percentile, xKeys;
+      createData = function(keys, groupName, destName) {
+        var dname = destName ? destName : groupName,
+          group = output[dname] = [],
+          p, percentile;
+        for (p = 4; p < data[groupName][keys[0]].length; p++) {
+          percentile = p + 1;
+          if (percentile % 5 === 0 || percentile === 99) {
+            group.push({
+              percentile: percentile,
+              values: keys.map(function(x) {
+                return {
+                  id: x,
+                  value: data[groupName][x][p]
+                };
+              })
+            });
+          }
+        }
+      },
+      getSimpleFilter = function(provinceSgcId) {
+        return function(sgcId) {
+          return sgc.sgc.getProvince(sgcId) === provinceSgcId;
+        };
+      },
+      getCompositeFilter = function(provinceSgcIds) {
+        return function(sgcId) {
+          return provinceSgcIds.indexOf(sgc.sgc.getProvince(sgcId)) !== -1;
+        };
+      },
+      g, groupName, xKeys, geoFilters, f;
 
     for (g = 0; g < groups.length; g++) {
       groupName = groups[g];
-
-      group = output[groupName] = [];
-
       xKeys = Object.keys(data[groupName]);
-      if (groupName === "geo")
+      if (groupName === geoGroup) {
         xKeys.sort(sgc.sortCCW);
-      for (p = 4; p < data[groupName][xKeys[0]].length; p++) {
-        percentile = p + 1;
-        if (percentile % 5 === 0 || percentile === 99) {
-          group.push({
-            percentile: percentile,
-            values: xKeys.map(function(x) {
-              return {
-                id: x,
-                value: data[groupName][x][p]
-              };
-            })
-          });
+
+        geoFilters = [
+          {
+            name: "geo",
+            filter: function(sgcId) {
+              return sgcId === "01" || sgc.sgc.getProvince(sgcId) === sgcId;
+            }
+          },
+          {
+            name: "geo_atl",
+            filter: getCompositeFilter(["10", "11", "12", "13"])
+          },
+          {
+            name: "geo_qc",
+            filter: getSimpleFilter("24")
+          },
+          {
+            name: "geo_on",
+            filter: getSimpleFilter("35")
+          },
+          {
+            name: "geo_pra",
+            filter: getCompositeFilter(["46", "47", "48"])
+          },
+          {
+            name: "geo_bc",
+            filter: getSimpleFilter("59")
+          },
+          {
+            name: "geo_terr",
+            filter: getCompositeFilter(["60", "61", "62"])
+          }
+        ];
+
+        for (f = 0; f < geoFilters.length; f++) {
+          createData(xKeys.filter(geoFilters[f].filter), geoGroup, geoFilters[f].name);
         }
+      } else {
+        createData(xKeys, groupName);
       }
     }
 
@@ -178,34 +237,14 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       });
       break;
     }
-    if (settings.group === "geo") {
-      newSettings.data = incomeData[newSettings.group].map(function(p) {
-        var newObj = $.extend(true, {}, p),
-          vals = settings.z.getDataPoints(newObj),
-          v = 0,
-          sgcId;
 
-
-        while(v < vals.length) {
-          sgcId = settings.x.getValue(vals[v]);
-          if (sgcId === "01" || sgc.sgc.getProvince(sgcId) === sgcId) {
-            v++;
-            continue;
-          }
-          vals.splice(v, 1);
-        }
-
-        return newObj;
-      });
-    } else {
-      newSettings.data = incomeData[newSettings.group];
-    }
+    newSettings.data = incomeData[newSettings.group];
     newSettings.datatable.title = i18next.t("datatableTitle", {
       ns: rootI18nNs,
       title: i18next.t(settings.group + "_title", {ns: rootI18nNs})
     });
     chart.classed(groups, false);
-    chart.classed(newSettings.group, true)
+    chart.classed(newSettings.group.substr(0, geoGroup.length) === geoGroup ? geoGroup : newSettings.group, true);
     if (chartObj) {
       chartObj.clear();
     }
