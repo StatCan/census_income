@@ -15,8 +15,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   }),
   settings = {
     margin: {
+      left: 70,
       right: 30,
-      bottom: 120
+      bottom: 130
     },
     x: {
       getValue: function(d){
