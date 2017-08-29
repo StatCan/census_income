@@ -156,12 +156,16 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
           if (percentile % 5 === 0 || percentile === 99) {
             group.push({
               percentile: percentile,
-              values: keys.map(function(x) {
-                return {
-                  id: x,
-                  value: data[groupName][x][p]
-                };
-              })
+              values: keys
+                .filter(function(x) {
+                  return !groupName === "age" || x !== "0";
+                })
+                .map(function(x) {
+                  return {
+                    id: x,
+                    value: data[groupName][x][p]
+                  };
+                })
             });
           }
         }
