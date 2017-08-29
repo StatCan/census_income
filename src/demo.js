@@ -13,6 +13,11 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     year: "numeric",
     timeZone: "UTC"
   }),
+  numberFormatter = i18n.getNumberFormatter({
+    style: "currency",
+    currency: "CAD",
+    currencyDisplay: "symbol"
+  }),
   settings = {
     margin: {
       left: 70,
@@ -35,6 +40,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     y: {
       getValue: function(d) {
         return d.value;
+      },
+      getText: function() {
+        return numberFormatter.format(this.y.getValue.apply(this, arguments)).replace("CA", "");
       }
     },
     z: {
