@@ -31,6 +31,14 @@
 	transform: rotate(-45deg);
 }
 
+.sex .x .tick:first-of-type text {
+	text-anchor: start;
+}
+
+.sex .x .tick:last-child text {
+	text-anchor: end;
+}
+
 td.highlight {
 	background: yellow;
 	font-weight: bolder;

@@ -224,6 +224,8 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         for (f = 0; f < geoFilters.length; f++) {
           createData(xKeys.filter(geoFilters[f].filter), geoGroup, geoFilters[f].name);
         }
+      } else if (groupName === "sex") {
+        createData(["f", "total", "m"], groupName);
       } else {
         createData(xKeys, groupName);
       }
