@@ -153,7 +153,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
           p, percentile;
         for (p = 4; p < data[groupName][keys[0]].length; p++) {
           percentile = p + 1;
-          if (percentile % 5 === 0 || percentile === 99) {
+          if (percentile % 5 === 0 || percentile > 95) {
             group.push({
               percentile: percentile,
               values: keys
