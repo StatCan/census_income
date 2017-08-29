@@ -235,36 +235,62 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   },
   showData = function(view) {
     var groups = "age agegroup geo sex time",
+      animate = function(sett) {
+        lineChart(chart, $.extend(true, {}, sett, {
+          data: sett.data.map(function(d) {
+            return $.extend({}, d, {
+              values: settings.z.getDataPoints.call(sett, d).map(function(d) {
+                return {
+                  id: d.id,
+                  value: 0
+                };
+              })
+            });
+          })
+        }));
+      },
+      showFn = function() {
+        settings.group = view || defaultView;
+        settings.data = incomeData[newSettings.group];
+        switch(settings.group) {
+        case "time":
+          break;
+        default:
+          newSettings = $.extend(true, {}, settings, {
+            x: {
+              type: "ordinal",
+              getDomain: ordinalX.getDomain,
+              getRange: ordinalX.getRange,
+              getTickText: ordinalX.getTickText
+            }
+          });
+          break;
+        }
+
+        newSettings.datatable.title = i18next.t("datatableTitle", {
+          ns: rootI18nNs,
+          title: i18next.t(settings.group + "_title", {ns: rootI18nNs})
+        });
+        chart.classed(groups, false);
+        chart.classed(newSettings.group.substr(0, geoGroup.length) === geoGroup ? geoGroup : newSettings.group, true);
+
+        animate(newSettings);
+        setTimeout(function() {
+          chartObj = lineChart(chart, newSettings);
+          highlightIncome();
+        }, 10);
+      },
       newSettings = settings;
 
-    settings.group = view || defaultView;
-    settings.data = incomeData[newSettings.group];
-    switch(settings.group) {
-    case "time":
-      break;
-    default:
-      newSettings = $.extend(true, {}, settings, {
-        x: {
-          type: "ordinal",
-          getDomain: ordinalX.getDomain,
-          getRange: ordinalX.getRange,
-          getTickText: ordinalX.getTickText
-        }
-      });
-      break;
-    }
-
-    newSettings.datatable.title = i18next.t("datatableTitle", {
-      ns: rootI18nNs,
-      title: i18next.t(settings.group + "_title", {ns: rootI18nNs})
-    });
-    chart.classed(groups, false);
-    chart.classed(newSettings.group.substr(0, geoGroup.length) === geoGroup ? geoGroup : newSettings.group, true);
     if (chartObj) {
-      chartObj.clear();
+      animate(chartObj.settings);
+      setTimeout(function() {
+        chartObj.clear();
+        showFn();
+      }, 1000);
+    } else {
+      showFn();
     }
-    chartObj = lineChart(chart, newSettings);
-    highlightIncome();
   },
   showIncome = function(income) {
     var incomeLine = chart.select("g").selectAll(".income-line")
