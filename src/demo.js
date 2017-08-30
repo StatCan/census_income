@@ -339,17 +339,13 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
             if (settings.y.getValue(val) === myIncome) {
               highIncome[q] = p;
             } else if (settings.y.getValue(val) > myIncome){
-              highIncome[q] = [p, p-1];
+              highIncome[q] = p - 1;
             }
           }
         }
       }
       for (h = 0; h < highIncome.length; h++) {
-        if (typeof highIncome[h] === "number") {
-          selector = getSelector(highIncome[h], h);
-        } else {
-          selector = getSelector(highIncome[h][0], h) + "," + getSelector(highIncome[h][1], h);
-        }
+        selector = getSelector(highIncome[h], h);
         tableBody.selectAll(selector).classed(highlightClass, true);
       }
     }
