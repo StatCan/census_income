@@ -34,7 +34,8 @@
 			"agegroup_x_72-5": "70 years plus",
 			"age_x_total": "Total - 15 years of age and older",
 			"age_x_year": "{{year}} years",
-			"datatableTitle": "Data: {{- title}}"
+			"datatableTitle": "Data: {{- title}}",
+			"percentile_highlight": " Percentile matching your input"
 		}
 	}
 }

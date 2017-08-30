@@ -326,8 +326,14 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       getSelector = function(row, column) {
         return "tr:nth-child(" + (row + 1) + ") td:nth-child(" + (column + 2) + ")";
       },
-      highIncome, p, q, vals, val, h, selector;
-    tableBody.selectAll("." + highlightClass).classed(highlightClass, false);
+      highIncome, p, q, vals, val, h, selector,
+      oldHighlight = tableBody.selectAll("." + highlightClass);
+
+    if (!oldHighlight.empty()) {
+      oldHighlight.classed(highlightClass, false);
+      oldHighlight.selectAll(".wb-inv").remove();
+    }
+
 
     if (myIncome) {
       highIncome = [];
@@ -346,7 +352,11 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       }
       for (h = 0; h < highIncome.length; h++) {
         selector = getSelector(highIncome[h], h);
-        tableBody.selectAll(selector).classed(highlightClass, true);
+        tableBody.selectAll(selector)
+          .classed(highlightClass, true)
+          .append("span")
+            .attr("class", "wb-inv")
+            .text(i18next.t("percentile_highlight"));
       }
     }
   },
