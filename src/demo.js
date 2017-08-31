@@ -277,7 +277,13 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         animate(newSettings);
         setTimeout(function() {
           chartObj = lineChart(chart, newSettings);
-          showIncome();
+          if (chart.classed("svg-shimmed") && settings.group.substr(0, 3) === "geo") {
+            chart.selectAll(".x text")
+              .attr("transform", "rotate(-45)");
+          }
+          if (myIncome) {
+            showIncome();
+          }
         }, 10);
       },
       newSettings = settings;
