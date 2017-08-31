@@ -277,7 +277,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         animate(newSettings);
         setTimeout(function() {
           chartObj = lineChart(chart, newSettings);
-          highlightIncome();
+          showIncome();
         }, 10);
       },
       newSettings = settings;
@@ -292,10 +292,10 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       showFn();
     }
   },
-  showIncome = function(income) {
+  showIncome = function() {
     var incomeLine = chart.select("g").selectAll(".income-line")
-        .data([income]),
-      y = chartObj.y(income);
+        .data([myIncome]),
+      y = chartObj.y(myIncome);
 
     incomeLine
       .enter()
@@ -309,9 +309,10 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     incomeLine
       .transition()
       .duration(1500)
-      .ease(d3.easeElasticOut)
         .attr("y1", y)
         .attr("y2", y);
+
+    highlightIncome();
   },
   highlightIncome = function() {
     var highlightClass = "highlight",
@@ -354,8 +355,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       value = parseInt(event.target.value, 10);
       if (value) {
         myIncome = value;
-        showIncome(myIncome);
-        highlightIncome();
+        showIncome();
       }
       break;
     case "view":
