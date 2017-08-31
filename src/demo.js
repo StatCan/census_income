@@ -170,13 +170,18 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
           }
         }
       },
+      geoSort = function(a, b) {
+        return data[groupName][a][98] - data[groupName][b][98];
+      },
       getSimpleFilter = function(provinceSgcId) {
         return function(sgcId) {
-          return sgc.sgc.getProvince(sgcId) === provinceSgcId;
+          return sgc.sgc.getProvince(sgcId) === provinceSgcId && sgc.sgc.getProvince(sgcId) !== sgcId;
         };
       },
       getCompositeFilter = function(provinceSgcIds) {
         return function(sgcId) {
+          if (sgc.sgc.getProvince(sgcId) === sgcId)
+            return false;
           return provinceSgcIds.indexOf(sgc.sgc.getProvince(sgcId)) !== -1;
         };
       },
@@ -186,7 +191,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       groupName = groups[g];
       xKeys = Object.keys(data[groupName]);
       if (groupName === geoGroup) {
-        xKeys.sort(sgc.sortCCW);
+        xKeys.sort(geoSort);
 
         geoFilters = [
           {
