@@ -282,9 +282,15 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         animate(newSettings);
         setTimeout(function() {
           chartObj = lineChart(chart, newSettings);
-          if (chart.classed("svg-shimmed") && settings.group.substr(0, 3) === "geo") {
-            chart.selectAll(".x text")
-              .attr("transform", "rotate(-45)");
+          if (chart.classed("svg-shimmed")) {
+            if (settings.group.substr(0, 3) === "geo") {
+              chart.selectAll(".x text")
+                .attr("transform", "rotate(-45)");
+            } else {
+              chart.selectAll(".x text[transform]")
+                .attr("transform", null);
+            }
+
           }
           if (myIncome) {
             showIncome();
