@@ -347,7 +347,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         for (q = 0; q < vals.length; q++) {
           val = vals[q];
           if (!highIncome[q]) {
-            if (settings.y.getValue(val) === myIncome) {
+            if (settings.y.getValue(val) === myIncome || p === settings.data.length - 1) {
               highIncome[q] = p;
             } else if (settings.y.getValue(val) > myIncome){
               highIncome[q] = p - 1;
