@@ -15,7 +15,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   numberFormatter = i18n.getNumberFormatter({
     style: "currency",
     currency: "CAD",
-    currencyDisplay: "symbol"
+    currencyDisplay: "symbol",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
   }),
   settings = {
     margin: {

@@ -39,6 +39,11 @@
 	text-anchor: end;
 }
 
+thead th,
+td {
+	text-align: right;
+}
+
 td.highlight {
 	background: yellow;
 	font-weight: bolder;
