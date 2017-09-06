@@ -27,7 +27,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       getValue: function(d){
         switch (settings.group){
         case "time":
-          return new Date(d.id + "-10");
+          return new Date(d.id + "-01");
         default:
           return d.id;
         }
@@ -258,6 +258,11 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         settings.data = incomeData[newSettings.group];
         switch(settings.group) {
         case "time":
+          newSettings = $.extend(true, {}, settings, {
+            x: {
+              ticks: 6
+            }
+          });
           break;
         default:
           newSettings = $.extend(true, {}, settings, {
