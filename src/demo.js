@@ -323,6 +323,12 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
     incomeLine
       .enter()
       .append("line")
+        .attr("x1", 0)
+        .attr("x2", chartObj.settings.innerWidth)
+        .attr("y1", chartObj.settings.innerHeight)
+        .attr("y2", chartObj.settings.innerHeight)
+        .transition()
+        .duration(1500)
         .attr("class", "income-line")
         .attr("x1", 0)
         .attr("x2", chartObj.settings.innerWidth)
