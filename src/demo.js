@@ -9,7 +9,6 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   geoGroup = "geo",
   rootI18nNs = "census_income",
   dateFormatter = i18n.getDateFormatter({
-    month: "long",
     year: "numeric",
     timeZone: "UTC"
   }),
