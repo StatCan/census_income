@@ -44,6 +44,9 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       },
       getText: function() {
         return numberFormatter.format(this.y.getValue.apply(this, arguments)).replace("CA", "");
+      },
+      getTickText: function(text) {
+        return numberFormatter.format(parseInt(text, 10)).replace("CA", "");
       }
     },
     z: {
