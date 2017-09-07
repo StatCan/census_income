@@ -5,7 +5,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
   container = d3.select(".income .data"),
   chart = container.append("svg")
     .attr("id", "canada_income"),
-  defaultView = "time",
+  defaultView = "age",
   geoGroup = "geo",
   rootI18nNs = "census_income",
   dateFormatter = i18n.getDateFormatter({
