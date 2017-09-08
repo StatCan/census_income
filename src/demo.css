@@ -54,7 +54,3 @@ td.highlight {
 	background: yellow;
 	font-weight: bolder;
 }
-
-td.highlight:before {
-	content: "* ";
-}
