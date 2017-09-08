@@ -35,7 +35,8 @@
 			"age_x_total": "Total - 15 years of age and older",
 			"age_x_year": "{{year}} years",
 			"datatableTitle": "Data table: {{- title}}",
-			"percentile_highlight": " Percentile matching your input"
+			"percentile_highlight": " Percentile matching your input",
+			"percentile_label": "{{percentile}}th"
 		}
 	}
 }

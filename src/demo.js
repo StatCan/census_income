@@ -60,7 +60,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
         return d.values;
       },
       getText: function(d) {
-        return d.percentile + "th";
+        return i18next.t("percentile_label", {ns: "census_income", percentile: d.percentile});
       },
       getClass: function(d) {
         return "p" + d.percentile;

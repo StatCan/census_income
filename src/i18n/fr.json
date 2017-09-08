@@ -35,7 +35,8 @@
 			"age_x_total": "Total - 15 ans et plus",
 			"age_x_year": "{{year}} ans",
 			"datatableTitle": "Tableau de données : {{- title}}",
-			"percentile_highlight": " Percentile corespondant à votre entrée"
+			"percentile_highlight": " Percentile corespondant à votre entrée",
+			"percentile_label": "{{percentile}}e"
 		}
 	}
 }
