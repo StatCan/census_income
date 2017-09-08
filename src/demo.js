@@ -67,7 +67,7 @@ var sgcI18nRoot = "lib/statcan_sgc/i18n/sgc/",
       }
     },
     showLabels: function() {
-      if ([99, 90, 75, 50, 25, 10].indexOf(this.z.getId.apply(this, arguments)) !== -1)
+      if ([99, 98, 97,96, 95, 90, 75, 50, 25, 10].indexOf(this.z.getId.apply(this, arguments)) !== -1)
         return true;
       return false;
     },
