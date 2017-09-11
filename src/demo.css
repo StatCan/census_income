@@ -32,6 +32,10 @@
 	stroke: #F00;
 }
 
+.time .x .tick:nth-last-of-type(2n-1) {
+	display: none;
+}
+
 .geo .x .tick text {
 	text-anchor: end;
 	transform: rotate(-45deg);
