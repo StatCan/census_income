@@ -1,6 +1,15 @@
+.data svg text {
+	fill: currentColor;
+}
+
+.data svg .domain,
+.data svg .tick line {
+	stroke: currentColor;
+}
+
 .dline {
 	stroke-width: 0.5;
-	stroke: #000;
+	stroke: currentColor;
 }
 
 .p90,
