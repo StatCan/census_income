@@ -409,7 +409,7 @@ i18n.load([sgcI18nRoot, rootI18nRoot], function() {
     .defer(d3.json, incomeDataUrl)
     .await(function(error, sgcs, income) {
       sgcData = sgcs;
-      incomeData = processData(income);
+      incomeData = processData(income.income);
 
       showData();
 
